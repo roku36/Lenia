@@ -21,11 +21,12 @@ const float survival_low = 0.367;
 const float survival_high = 0.945;
 
 void main() {
+	// top left
 	ivec2 tl = ivec2(0, 0);
   ivec2 size = ivec2(params.texture_size.x - 1, params.texture_size.y - 1);
   ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
 
-	float current_status = imageLoad(current_image, uv, tl, size).x;
+	float current_status = imageLoad(current_image, uv).x;
   float alive_cells = 0.0;
   float total_cells = 0.0;
 
@@ -54,16 +55,23 @@ void main() {
   float next_status = current_status;
 
   if (mean > birth_low && mean < birth_high && density > survival_low && density < survival_high) {
-    next_status = min(1.0, current_status + 1.5 * rand(cell_idx)); // Increase cell state
+    next_status = min(1.0, current_status);
+    // next_status = min(1.0, current_status + 1.5 * rand(uv)); // Increase cell state
   } else if (!(mean > survival_low && mean < survival_high && density > survival_low && density < survival_high)) {
-    next_status = max(0.0, current_status - 1.5 * rand(cell_idx)); // Decrease cell state
+    next_status = max(0.0, current_status);
+    // next_status = max(0.0, current_status - 1.5 * rand(uv)); // Decrease cell state
   }
 
   float result = next_status;
-  imageStore(cells_out, gidx, vec4(vec3(next_status.x), 1.0));
-  imageStore(output_image, uv, result)
+  if (params.add_wave_point.z > 0.0 && uv.x == floor(params.add_wave_point.x) && uv.y == floor(params.add_wave_point.y)) {
+		result = 1.0;
+  }
+  vec4 result_vec = vec4(result, result, result, 1.0);
+
+  imageStore(output_image, uv, result_vec);
 }
 
 float rand(vec2 co){
   return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
+
