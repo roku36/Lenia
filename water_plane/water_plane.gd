@@ -126,7 +126,7 @@ func _process(delta: float) -> void:
 	# is used and thus our next_rd will be populated with our next result.
 	# It's probably overkill to sent texture_size and damp as parameters as these are static
 	# but we sent add_wave_point as it may be modified while process runs in parallel.
-	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, add_wave_point, texture_size, damp))
+	RenderingServer.call_on_render_thread(_render_process.bind(next_texture, add_wave_point, texture_size))
 
 ###############################################################################
 # Everything after this point is designed to run on our rendering thread.
@@ -185,7 +185,7 @@ func _initialize_compute_code(init_with_texture_size: Vector2i) -> void:
 		texture_sets[i] = _create_uniform_set(texture_rds[i])
 
 
-func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vector2i, damp: float) -> void:
+func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vector2i) -> void:
 	# We don't have structures (yet) so we need to build our push constant
 	# "the hard way"...
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
@@ -204,8 +204,8 @@ func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vect
 	# divisible by 8.
 	# In combination with a discard check in the shader this ensures
 	# we cover the entire texture.
-	var x_groups: int = (tex_size.x - 1) / 8 + 1
-	var y_groups: int = (tex_size.y - 1) / 8 + 1
+	var x_groups: int = ceili(tex_size.x / 8.0)
+	var y_groups: int = ceili(tex_size.y / 8.0)
 
 	var next_set: RID = texture_sets[with_next_texture]
 	var current_set: RID = texture_sets[(with_next_texture - 1) % 3]
