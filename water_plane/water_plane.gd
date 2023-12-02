@@ -22,8 +22,8 @@ extends Area3D
 @export var texture_size : Vector2i = Vector2i(512, 512)
 @export_range(1.0, 10.0, 0.1) var damp : float = 1.0
 
-var t = 0.0
-var max_t = 0.1
+var t: float = 0.0
+var max_t: float = 0.1
 
 var texture : Texture2DRD
 var next_texture : int = 0
@@ -33,7 +33,7 @@ var mouse_pos : Vector2
 var mouse_pressed : bool = false
 
 # Called when the node enters the scene tree for the first time.
-func _ready():
+func _ready() -> void:
 	# In case we're running stuff on the rendering thread
 	# we need to do our initialisation on that thread.
 	RenderingServer.call_on_render_thread(_initialize_compute_code.bind(texture_size))
@@ -47,7 +47,7 @@ func _ready():
 		texture = material.get_shader_parameter("effect_texture")
 
 
-func _exit_tree():
+func _exit_tree() -> void:
 	# Make sure we clean up!
 	if texture:
 		texture.texture_rd_rid = RID()
@@ -55,7 +55,7 @@ func _exit_tree():
 	RenderingServer.call_on_render_thread(_free_compute_resources)
 
 
-func _unhandled_input(event):
+func _unhandled_input(event: InputEvent) -> void:
 	# If tool enabled, we don't want to handle our input in the editor.
 	if Engine.is_editor_hint():
 		return
@@ -67,21 +67,21 @@ func _unhandled_input(event):
 		mouse_pressed = event.pressed
 
 
-func _check_mouse_pos():
+func _check_mouse_pos() -> void:
 	# This is a mouse event, do a raycast.
-	var camera = get_viewport().get_camera_3d()
+	var camera: Camera3D = get_viewport().get_camera_3d()
 
-	var parameters = PhysicsRayQueryParameters3D.new()
+	var parameters: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.new()
 	parameters.from = camera.project_ray_origin(mouse_pos)
 	parameters.to = parameters.from + camera.project_ray_normal(mouse_pos) * 100.0
 	parameters.collision_mask = 1
 	parameters.collide_with_bodies = false
 	parameters.collide_with_areas = true
 
-	var result = get_world_3d().direct_space_state.intersect_ray(parameters)
+	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(parameters)
 	if result.size() > 0:
 		# Transform our intersection point.
-		var pos = global_transform.affine_inverse() * result.position
+		var pos: Vector3 = global_transform.affine_inverse() * result.position
 		add_wave_point.x = clamp(pos.x / 5.0, -0.5, 0.5) * texture_size.x + 0.5 * texture_size.x
 		add_wave_point.y = clamp(pos.z / 5.0, -0.5, 0.5) * texture_size.y + 0.5 * texture_size.y
 		add_wave_point.w = 1.0 # We have w left over so we use it to indicate mouse is over our water plane.
@@ -92,7 +92,7 @@ func _check_mouse_pos():
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
+func _process(delta: float) -> void:
 	# If tool is enabled, ignore mouse input.
 	if Engine.is_editor_hint():
 		add_wave_point.w = 0.0
@@ -152,13 +152,13 @@ func _create_uniform_set(texture_rd : RID) -> RID:
 	return rd.uniform_set_create([uniform], shader, 0)
 
 
-func _initialize_compute_code(init_with_texture_size):
+func _initialize_compute_code(init_with_texture_size: Vector2i) -> void:
 	# As this becomes part of our normal frame rendering,
 	# we use our main rendering device here.
 	rd = RenderingServer.get_rendering_device()
 
 	# Create our shader.
-	var shader_file = load("res://water_plane/water_compute.glsl")
+	var shader_file: Resource = load("res://water_plane/water_compute.glsl")
 	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
 	shader = rd.shader_create_from_spirv(shader_spirv)
 	pipeline = rd.compute_pipeline_create(shader)
@@ -185,7 +185,7 @@ func _initialize_compute_code(init_with_texture_size):
 		texture_sets[i] = _create_uniform_set(texture_rds[i])
 
 
-func _render_process(with_next_texture, wave_point, tex_size, damp):
+func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vector2i, damp: float) -> void:
 	# We don't have structures (yet) so we need to build our push constant
 	# "the hard way"...
 	var push_constant : PackedFloat32Array = PackedFloat32Array()
@@ -204,12 +204,12 @@ func _render_process(with_next_texture, wave_point, tex_size, damp):
 	# divisible by 8.
 	# In combination with a discard check in the shader this ensures
 	# we cover the entire texture.
-	var x_groups = (tex_size.x - 1) / 8 + 1
-	var y_groups = (tex_size.y - 1) / 8 + 1
+	var x_groups: int = (tex_size.x - 1) / 8 + 1
+	var y_groups: int = (tex_size.y - 1) / 8 + 1
 
-	var next_set = texture_sets[with_next_texture]
-	var current_set = texture_sets[(with_next_texture - 1) % 3]
-	var previous_set = texture_sets[(with_next_texture - 2) % 3]
+	var next_set: RID = texture_sets[with_next_texture]
+	var current_set: RID = texture_sets[(with_next_texture - 1) % 3]
+	var previous_set: RID = texture_sets[(with_next_texture - 2) % 3]
 
 	# Run our compute shader.
 	var compute_list := rd.compute_list_begin()
@@ -227,7 +227,7 @@ func _render_process(with_next_texture, wave_point, tex_size, damp):
 	#rd.barrier(RenderingDevice.BARRIER_MASK_COMPUTE)
 
 
-func _free_compute_resources():
+func _free_compute_resources() -> void:
 	# Note that our sets and pipeline are cleaned up automatically as they are dependencies :P
 	for i in range(3):
 		if texture_rds[i]:
