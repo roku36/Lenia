@@ -67,63 +67,14 @@ void main() {
 
 	float val = imageLoad(current_image, uv).x;
 	float growth = bell(avg, mu, sigma) * 2. - 1.;
-	float c = clamp(val + dt * growth, 0., 10.);
+	float c = clamp(val + dt * growth, 0., 1.);
 
-	if (params.add_wave_point.z > 0.0 && uv.x == floor(params.add_wave_point.x) && uv.y == floor(params.add_wave_point.y)) {
+	// if uv.z == add_wave_point.z && uv.xy euclid distance from add_wave_point.xy < 30
+	if (params.add_wave_point.z > 0.0 && 10.0 * 10.0 > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
+		// c = 0.5 + 10 * noise(vec2(val));
 		c = 10.0;
 	}
 
 	vec4 result_vec = vec4(c,c,c,1.);
 	imageStore(output_image, uv, result_vec);
 }
-
-// void main() {
-// 	// top left
-// 	ivec2 tl = ivec2(0, 0);
-// 	ivec2 size = ivec2(params.texture_size.x - 1, params.texture_size.y - 1);
-// 	ivec2 uv = ivec2(gl_GlobalInvocationID.xy);
-//
-// 	float current_status = imageLoad(current_image, uv).x;
-// 	float alive_cells = 0.0;
-// 	float total_cells = 0.0;
-//
-// 	for (int dx = -kernelSize; dx <= kernelSize; dx++) {
-// 		for (int dy = -kernelSize; dy <= kernelSize; dy++) {
-// 			float cell_value = imageLoad(current_image, clamp(uv + ivec2(dx, dy), tl, size)).x;
-// 			float weight = kernelSize - sqrt((dx * dx) + (dy * dy));
-// 			alive_cells += cell_value;
-// 			total_cells += 1.5 * weight;
-// 		}
-// 	}
-//
-// 	float mean = alive_cells / total_cells;
-// 	float variance = 0.0;
-//
-// 	for (int dx = -kernelSize; dx <= kernelSize; dx++) {
-// 		for (int dy = -kernelSize; dy <= kernelSize; dy++) {
-// 			float cell_value = imageLoad(current_image, clamp(uv + ivec2(dx, dy), tl, size)).x;
-// 			variance += (cell_value - mean) * (cell_value - mean);
-// 		}
-// 	}
-//
-// 	variance /= total_cells;
-// 	float density = sqrt(variance);
-//
-// 	float next_status = current_status;
-//
-// 	if (mean > birth_low && mean < birth_high && density > survival_low && density < survival_high) {
-// 		next_status = min(1.0, current_status);
-// 		// next_status = min(1.0, current_status + 1.5 * rand(uv)); // Increase cell state
-// 	} else if (!(mean > survival_low && mean < survival_high && density > survival_low && density < survival_high)) {
-// 		next_status = max(0.0, current_status);
-// 		// next_status = max(0.0, current_status - 1.5 * rand(uv)); // Decrease cell state
-// 	}
-//
-// 	float result = next_status;
-// 	if (params.add_wave_point.z > 0.0 && uv.x == floor(params.add_wave_point.x) && uv.y == floor(params.add_wave_point.y)) {
-// 		result = 1.0;
-// 	}
-// 	vec4 result_vec = vec4(result, result, result, 1.0);
-//
-// 	imageStore(output_image, uv, result_vec);
-// }
