@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://b2a5bjsxw63wr"]
 
-[ext_resource type="Shader" path="res://water_plane/water_shader.gdshader" id="1_rujqj"]
-[ext_resource type="Script" path="res://water_plane/lenia.gd" id="1_tgpdy"]
+[ext_resource type="Shader" path="res://lenia_plane/water_shader.gdshader" id="1_rujqj"]
+[ext_resource type="Script" path="res://lenia_plane/lenia.gd" id="1_tgpdy"]
 [ext_resource type="Texture2D" uid="uid://d051ugdf65it1" path="res://assets/polyhaven/industrial_sunset_puresky_2k.hdr" id="3_fdqn0"]
 
 [sub_resource type="Texture2DRD" id="Texture2DRD_gbeoi"]
@@ -32,7 +32,7 @@ sky_material = SubResource("PanoramaSkyMaterial_xm1lt")
 background_mode = 2
 sky = SubResource("Sky_ng08w")
 
-[node name="WaterPlane" type="Area3D"]
+[node name="LeniaPlane" type="Area3D"]
 script = ExtResource("1_tgpdy")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]

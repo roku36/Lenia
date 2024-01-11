@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" path="res://main.gd" id="1_yvrvl"]
 [ext_resource type="Texture2D" uid="uid://d051ugdf65it1" path="res://assets/polyhaven/industrial_sunset_puresky_2k.hdr" id="2_g2q6b"]
-[ext_resource type="PackedScene" uid="uid://b2a5bjsxw63wr" path="res://water_plane/water_plane.tscn" id="2_k1nfp"]
+[ext_resource type="PackedScene" uid="uid://b2a5bjsxw63wr" path="res://lenia_plane/lenia_plane.tscn" id="2_k1nfp"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_obhcg"]
 panorama = ExtResource("2_g2q6b")
@@ -26,10 +26,10 @@ shadow_enabled = true
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_5dv8s")
 
-[node name="WaterPlane" parent="." instance=ExtResource("2_k1nfp")]
+[node name="LeniaPlane" parent="." instance=ExtResource("2_k1nfp")]
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(0.900266, -0.142464, 0.41137, -0.113954, 0.834877, 0.538512, -0.420162, -0.531681, 0.735377, 1.55343, 1.1434, 2.431)
+transform = Transform3D(1, -6.97574e-16, -1.5246e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, 2.08165e-12, 3, 2.08165e-12)
 
 [node name="Container" type="VBoxContainer" parent="."]
 offset_right = 40.0
@@ -42,11 +42,6 @@ theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
 theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 40
 text = "aaaaaaaaaaaaaaa"
-
-[node name="Rotate" type="CheckBox" parent="Container"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Rotate"
 
 [node name="RainSize" type="HBoxContainer" parent="Container"]
 layout_mode = 2

@@ -158,7 +158,7 @@ func _initialize_compute_code(init_with_texture_size: Vector2i) -> void:
 	rd = RenderingServer.get_rendering_device()
 
 	# Create our shader.
-	var shader_file: Resource = load("res://water_plane/lenia.glsl")
+	var shader_file: Resource = load("res://lenia_plane/lenia.glsl")
 	var shader_spirv: RDShaderSPIRV = shader_file.get_spirv()
 	shader = rd.shader_create_from_spirv(shader_spirv)
 	pipeline = rd.compute_pipeline_create(shader)

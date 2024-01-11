@@ -72,7 +72,7 @@ void main() {
 	// if uv.z == add_wave_point.z && uv.xy euclid distance from add_wave_point.xy < 30
 	if (params.add_wave_point.z > 0.0 && 10.0 * 10.0 > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
 		// c = 0.5 + 10 * noise(vec2(val));
-		c = 10.0;
+		c = params.add_wave_point.z;
 	}
 
 	vec4 result_vec = vec4(c,c,c,1.);
