@@ -1,7 +1,7 @@
 [gd_scene load_steps=11 format=3 uid="uid://b2a5bjsxw63wr"]
 
-[ext_resource type="Shader" path="res://lenia_plane/water_shader.gdshader" id="1_rujqj"]
 [ext_resource type="Script" path="res://lenia_plane/lenia.gd" id="1_tgpdy"]
+[ext_resource type="Shader" path="res://lenia_plane/lenia_shader.gdshader" id="2_0tcqr"]
 [ext_resource type="Texture2D" uid="uid://d051ugdf65it1" path="res://assets/polyhaven/industrial_sunset_puresky_2k.hdr" id="3_fdqn0"]
 
 [sub_resource type="Texture2DRD" id="Texture2DRD_gbeoi"]
@@ -9,7 +9,7 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_qy6ln"]
 resource_local_to_scene = true
 render_priority = 0
-shader = ExtResource("1_rujqj")
+shader = ExtResource("2_0tcqr")
 shader_parameter/albedo = Color(5.19812e-06, 0.748295, 0.942472, 1)
 shader_parameter/metalic = 1.0
 shader_parameter/roughness = 0.0

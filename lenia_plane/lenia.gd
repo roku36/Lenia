@@ -1,22 +1,6 @@
 # @tool
 extends Area3D
 
-############################################################################
-# Water ripple effect shader - Bastiaan Olij
-#
-# This is an example of how to implement a more complex compute shader
-# in Godot and making use of the new Custom Texture RD API added to
-# the RenderingServer.
-#
-# If thread model is set to Multi-Threaded the code related to compute will
-# run on the render thread. This is needed as we want to add our logic to
-# the normal rendering pipeline for this thread.
-#
-# The effect itself is an implementation of the classic ripple effect
-# that has been around since the 90ies but in a compute shader.
-# If someone knows if the original author ever published a paper I could
-# quote, please let me know :)
-
 @export var rain_size : float = 3.0
 @export var mouse_size : float = 5.0
 @export var texture_size : Vector2i = Vector2i(512, 512)
