@@ -67,10 +67,10 @@ void main() {
 
 	float val = imageLoad(current_image, uv).x;
 	float growth = bell(avg, mu, sigma) * 2. - 1.;
-	float c = clamp(val + dt * growth, 0., 1.);
+	float c = clamp(val + dt * growth, 0., 10.);
 
 	if (params.add_wave_point.z > 0.0 && uv.x == floor(params.add_wave_point.x) && uv.y == floor(params.add_wave_point.y)) {
-		c = 1.0;
+		c = 10.0;
 	}
 
 	vec4 result_vec = vec4(c,c,c,1.);
