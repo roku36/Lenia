@@ -34,8 +34,9 @@ environment = SubResource("Environment_5dv8s")
 transform = Transform3D(1, -6.97574e-16, -1.52459e-23, -1.5246e-23, -4.37114e-08, 1, -6.97574e-16, -1, -4.37114e-08, 2.08165e-12, 3.2, 2.08165e-12)
 
 [node name="Container" type="VBoxContainer" parent="."]
-offset_right = 40.0
-offset_bottom = 40.0
+offset_left = 23.0
+offset_right = 368.0
+offset_bottom = 55.0
 
 [node name="FpsLabel" type="Label" parent="Container"]
 layout_mode = 2

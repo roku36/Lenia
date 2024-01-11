@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://b2a5bjsxw63wr"]
+[gd_scene load_steps=9 format=3 uid="uid://b2a5bjsxw63wr"]
 
 [ext_resource type="Script" path="res://lenia_plane/lenia.gd" id="1_tgpdy"]
 [ext_resource type="Shader" path="res://lenia_plane/lenia_shader.gdshader" id="2_0tcqr"]
@@ -22,6 +22,13 @@ size = Vector2(5, 5)
 [sub_resource type="BoxShape3D" id="BoxShape3D_gvcbg"]
 size = Vector3(5, 0.01, 5)
 
+[sub_resource type="PlaneMesh" id="PlaneMesh_kw0he"]
+size = Vector2(10, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_080i0"]
+albedo_color = Color(0, 0, 0, 1)
+metallic_specular = 0.0
+
 [node name="LeniaPlane" type="Area3D"]
 script = ExtResource("1_tgpdy")
 
@@ -35,3 +42,8 @@ shape = SubResource("BoxShape3D_gvcbg")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.983217, 5.59419e-08, 0.182442, -0.178298, 0.211922, 0.960885, -0.0386633, -0.977287, 0.208365, 0, 1.12002, 0)
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.25, 2.08165e-12)
+mesh = SubResource("PlaneMesh_kw0he")
+surface_material_override/0 = SubResource("StandardMaterial3D_080i0")
