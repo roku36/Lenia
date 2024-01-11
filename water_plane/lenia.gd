@@ -114,7 +114,7 @@ func _process(delta: float) -> void:
 		add_wave_point.z = mouse_size if mouse_pressed else 0.0
 
 	# Increase our next texture index.
-	next_texture = (next_texture + 1) % 3
+	next_texture = (next_texture + 1) % 2
 
 	# Update our texture to show our next result (we are about to create).
 	# Note that `_initialize_compute_code` may not have run yet so the first
@@ -140,8 +140,8 @@ var pipeline : RID
 # - One to render into
 # - One that contains the last frame rendered
 # - One for the frame before that
-var texture_rds : Array = [ RID(), RID(), RID() ]
-var texture_sets : Array = [ RID(), RID(), RID() ]
+var texture_rds : Array = [ RID(), RID() ]
+var texture_sets : Array = [ RID(), RID()]
 
 func _create_uniform_set(texture_rd : RID) -> RID:
 	var uniform := RDUniform.new()
@@ -174,7 +174,7 @@ func _initialize_compute_code(init_with_texture_size: Vector2i) -> void:
 	tf.mipmaps = 1
 	tf.usage_bits = RenderingDevice.TEXTURE_USAGE_SAMPLING_BIT + RenderingDevice.TEXTURE_USAGE_COLOR_ATTACHMENT_BIT + RenderingDevice.TEXTURE_USAGE_STORAGE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_UPDATE_BIT + RenderingDevice.TEXTURE_USAGE_CAN_COPY_TO_BIT
 
-	for i in range(3):
+	for i in range(2):
 		# Create our texture.
 		texture_rds[i] = rd.texture_create(tf, RDTextureView.new(), [])
 
@@ -208,8 +208,8 @@ func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vect
 	var y_groups: int = ceili(tex_size.y / 8.0)
 
 	var next_set: RID = texture_sets[with_next_texture]
-	var current_set: RID = texture_sets[(with_next_texture - 1) % 3]
-	var previous_set: RID = texture_sets[(with_next_texture - 2) % 3]
+	var current_set: RID = texture_sets[(with_next_texture - 1)]
+	# var current_set: RID = texture_sets[(with_next_texture - 1) % 2]
 
 	# Run our compute shader.
 	var compute_list := rd.compute_list_begin()
@@ -228,7 +228,7 @@ func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vect
 
 func _free_compute_resources() -> void:
 	# Note that our sets and pipeline are cleaned up automatically as they are dependencies :P
-	for i in range(3):
+	for i in range(2):
 		if texture_rds[i]:
 			rd.free_rid(texture_rds[i])
 
