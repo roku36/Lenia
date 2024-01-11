@@ -1,8 +1,7 @@
-[gd_scene load_steps=11 format=3 uid="uid://b2a5bjsxw63wr"]
+[gd_scene load_steps=7 format=3 uid="uid://b2a5bjsxw63wr"]
 
 [ext_resource type="Script" path="res://lenia_plane/lenia.gd" id="1_tgpdy"]
 [ext_resource type="Shader" path="res://lenia_plane/lenia_shader.gdshader" id="2_0tcqr"]
-[ext_resource type="Texture2D" uid="uid://d051ugdf65it1" path="res://assets/polyhaven/industrial_sunset_puresky_2k.hdr" id="3_fdqn0"]
 
 [sub_resource type="Texture2DRD" id="Texture2DRD_gbeoi"]
 
@@ -13,7 +12,7 @@ shader = ExtResource("2_0tcqr")
 shader_parameter/color1 = Color(0.235294, 0, 0, 1)
 shader_parameter/color2 = Color(0, 1, 0, 1)
 shader_parameter/metalic = 1.0
-shader_parameter/roughness = 1.0
+shader_parameter/roughness = 0.0
 shader_parameter/effect_texture_size = null
 shader_parameter/effect_texture = SubResource("Texture2DRD_gbeoi")
 
@@ -22,16 +21,6 @@ size = Vector2(5, 5)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_gvcbg"]
 size = Vector3(5, 0.01, 5)
-
-[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_xm1lt"]
-panorama = ExtResource("3_fdqn0")
-
-[sub_resource type="Sky" id="Sky_ng08w"]
-sky_material = SubResource("PanoramaSkyMaterial_xm1lt")
-
-[sub_resource type="Environment" id="Environment_iw7ig"]
-background_mode = 2
-sky = SubResource("Sky_ng08w")
 
 [node name="LeniaPlane" type="Area3D"]
 script = ExtResource("1_tgpdy")
@@ -46,6 +35,3 @@ shape = SubResource("BoxShape3D_gvcbg")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.983217, 5.59419e-08, 0.182442, -0.178298, 0.211922, 0.960885, -0.0386633, -0.977287, 0.208365, 0, 1.12002, 0)
-
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_iw7ig")

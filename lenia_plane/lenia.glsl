@@ -58,7 +58,8 @@ void main() {
 		for (int y=-int(R); y<=int(R); y++)
 		{
 			float r = sqrt(float(x*x + y*y)) / R;
-			float val = imageLoad(current_image, clamp(uv + ivec2(x, y), tl, size)).x;
+			ivec2 wrapped_coords = ivec2(mod(uv + ivec2(x, y), size));
+			float val = imageLoad(current_image, wrapped_coords).x;
 			float weight = bell(r, rho, omega);
 			sum += val * weight;
 			total += weight;
