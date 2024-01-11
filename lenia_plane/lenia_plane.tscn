@@ -10,9 +10,10 @@
 resource_local_to_scene = true
 render_priority = 0
 shader = ExtResource("2_0tcqr")
-shader_parameter/albedo = Color(5.19812e-06, 0.748295, 0.942472, 1)
+shader_parameter/color1 = Color(0.235294, 0, 0, 1)
+shader_parameter/color2 = Color(0, 1, 0, 1)
 shader_parameter/metalic = 1.0
-shader_parameter/roughness = 0.0
+shader_parameter/roughness = 1.0
 shader_parameter/effect_texture_size = null
 shader_parameter/effect_texture = SubResource("Texture2DRD_gbeoi")
 

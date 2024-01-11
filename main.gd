@@ -9,7 +9,6 @@ var y: float = 0.0
 @onready var fps_label: Label = $Container/FpsLabel
 
 func _ready() -> void:
-	$Container/RainSize/HSlider.value = lenia_plane.rain_size
 	$Container/MouseSize/HSlider.value = lenia_plane.mouse_size
 
 

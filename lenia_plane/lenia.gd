@@ -76,7 +76,7 @@ func _check_mouse_pos() -> void:
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	# If tool is enabled, ignore mouse input.
 	if Engine.is_editor_hint():
 		add_wave_point.w = 0.0
@@ -84,18 +84,7 @@ func _process(delta: float) -> void:
 		# Check where our mouse intersects our area, can change if things move.
 		_check_mouse_pos()
 
-	# If we're not using the mouse, animate water drops, we (ab)used our W for this.
-	if add_wave_point.w == 0.0:
-		t += delta
-		if t > max_t:
-			t = 0
-			add_wave_point.x = randi_range(0, texture_size.x)
-			add_wave_point.y = randi_range(0, texture_size.y)
-			add_wave_point.z = rain_size
-		else:
-			add_wave_point.z = 0.0
-	else:
-		add_wave_point.z = mouse_size if mouse_pressed else 0.0
+	add_wave_point.z = mouse_size if mouse_pressed else 0.0
 
 	# Increase our next texture index.
 	next_texture = (next_texture + 1) % 2

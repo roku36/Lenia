@@ -35,7 +35,7 @@ float noise( in vec2 p )
 	return dot( n, vec3(70.0) );
 }
 
-const float R = 15.;       // space resolution = kernel radius
+const float R = 25.;       // space resolution = kernel radius
 const float T = 10.;       // time resolution = number of divisions per unit time
 const float dt = 1./T;     // time step
 const float mu = 0.14;     // growth center

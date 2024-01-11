@@ -43,22 +43,6 @@ theme_override_constants/outline_size = 5
 theme_override_font_sizes/font_size = 40
 text = "aaaaaaaaaaaaaaa"
 
-[node name="RainSize" type="HBoxContainer" parent="Container"]
-layout_mode = 2
-
-[node name="HSlider" type="HSlider" parent="Container/RainSize"]
-custom_minimum_size = Vector2(250, 0)
-layout_mode = 2
-min_value = 1.0
-max_value = 10.0
-step = 0.1
-value = 1.0
-
-[node name="Label" type="Label" parent="Container/RainSize"]
-layout_mode = 2
-theme_override_colors/font_color = Color(0, 0, 0, 1)
-text = "Rain size"
-
 [node name="MouseSize" type="HBoxContainer" parent="Container"]
 layout_mode = 2
 
@@ -75,5 +59,4 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0, 0, 0, 1)
 text = "Mouse size"
 
-[connection signal="value_changed" from="Container/RainSize/HSlider" to="." method="_on_rain_size_changed"]
 [connection signal="value_changed" from="Container/MouseSize/HSlider" to="." method="_on_mouse_size_changed"]
