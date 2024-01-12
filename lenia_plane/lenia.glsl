@@ -35,7 +35,7 @@ float noise( in vec2 p )
 	return dot( n, vec3(70.0) );
 }
 
-const float R = 25.;       // space resolution = kernel radius
+const float R = 20.;       // space resolution = kernel radius
 const float T = 10.;       // time resolution = number of divisions per unit time
 const float dt = 1./T;     // time step
 const float mu = 0.14;     // growth center
@@ -67,11 +67,15 @@ void main() {
 	float avg = sum / total;
 
 	float val = imageLoad(current_image, uv).x;
-	float growth = bell(avg, mu, sigma) * 2. - 1.;
+	// float growth = bell(avg, mu, sigma) * 2. - 1.;
+	float growth = bell(avg*(1.0 + (val-0.5)*0.2), mu, sigma) * 2. - 1.;
+	// float growth = bell(avg, mu, sigma*(1.0 + val*0.5)) * 2. - 1.;
 	float c = clamp(val + dt * growth, 0., 1.);
 
 	// if uv.z == add_wave_point.z && uv.xy euclid distance from add_wave_point.xy < 30
-	if (params.add_wave_point.z > 0.0 && 10.0 * 10.0 > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
+	// float spawn_range = 10.0;
+	float spawn_range = 10.0;
+	if (params.add_wave_point.z > 0.0 && spawn_range * spawn_range > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
 		// c = 0.5 + 10 * noise(vec2(val));
 		c = params.add_wave_point.z;
 	}

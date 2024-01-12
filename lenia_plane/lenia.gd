@@ -1,4 +1,3 @@
-# @tool
 extends Area3D
 
 @export var rain_size : float = 3.0
@@ -40,10 +39,6 @@ func _exit_tree() -> void:
 
 
 func _unhandled_input(event: InputEvent) -> void:
-	# If tool enabled, we don't want to handle our input in the editor.
-	if Engine.is_editor_hint():
-		return
-
 	if event is InputEventMouseMotion or event is InputEventMouseButton:
 		mouse_pos = event.global_position
 
@@ -196,7 +191,7 @@ func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vect
 	# We don't need to sync up here, Godots default barriers will do the trick.
 	# If you want the output of a compute shader to be used as input of
 	# another computer shader you'll need to add a barrier:
-	#rd.barrier(RenderingDevice.BARRIER_MASK_COMPUTE)
+	rd.barrier(RenderingDevice.BARRIER_MASK_COMPUTE)
 
 
 func _free_compute_resources() -> void:
