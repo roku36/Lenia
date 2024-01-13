@@ -11,7 +11,7 @@ void main() {
 
 	float value = imageLoad(current_image, uv).x;
 
-	// devide the value by sum of value of cells
+	// devide the value by sum of value of whole cells
 
 	vec4 result_vec = vec4(val,val,val,1.);
 	imageStore(output_image, uv, result_vec);

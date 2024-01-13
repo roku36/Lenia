@@ -5,6 +5,7 @@ uniform vec3 color1 : source_color;
 uniform vec3 color2 : source_color;
 uniform float metalic : hint_range(0.0, 1.0, 0.1) = 0.8;
 uniform float roughness : hint_range(0.0, 1.0, 0.1) = 0.2;
+uniform sampler2D color_gradient;
 uniform sampler2D effect_texture;
 uniform vec2 effect_texture_size;
 
@@ -30,7 +31,10 @@ void fragment() {
 	// ALBEDO = albedo.rgb;
 	// use effect_texture as albedo
 	float value = texture(effect_texture, UV).r;
-	vec3 albedo = mix(color1, color2, value);
+	// vec3 albedo = mix(color1, color2, value);
+	vec3 albedo = texture(color_gradient,vec2(clamp(value, 0.01, 0.99), 0.1)).rgb;
+	// vec3 albedo = texture(color_gradient,UV).rgb;
+	// vec3 albedo = vec3(value);
 	ALBEDO = albedo;
 	METALLIC = metalic;
 	ROUGHNESS = roughness;

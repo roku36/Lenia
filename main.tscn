@@ -12,6 +12,7 @@ sky_material = SubResource("PanoramaSkyMaterial_obhcg")
 
 [sub_resource type="Environment" id="Environment_5dv8s"]
 background_mode = 2
+background_energy_multiplier = 0.0
 sky = SubResource("Sky_s1sgk")
 tonemap_mode = 2
 tonemap_white = 0.36
@@ -21,7 +22,7 @@ script = ExtResource("1_yvrvl")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.5, -0.75, 0.433013, 2.78059e-08, 0.5, 0.866026, -0.866025, -0.433013, 0.25, 0, 1, 0)
-light_energy = 30.0
+light_energy = 0.0
 light_indirect_energy = 13.731
 shadow_enabled = true
 
