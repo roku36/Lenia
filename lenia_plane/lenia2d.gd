@@ -5,7 +5,7 @@ extends Node2D
 @export_range(1.0, 10.0, 0.1) var damp : float = 1.0
 
 @onready var lenia_canvas: ColorRect = %ColorRect
-@onready var fps_label: Label = $FpsLabel
+@onready var fps_label: Label = $CanvasLayer/FpsLabel
 
 var t: float = 0.0
 var max_t: float = 0.1
@@ -31,8 +31,7 @@ func _ready() -> void:
 		texture = canvas_material.get_shader_parameter("effect_texture")
 
 func _check_mouse_pos() -> void:
-	# Get our intersection point.
-	var pos := get_viewport().get_mouse_position()
+	var pos := lenia_canvas.get_local_mouse_position()
 	add_wave_point.x = pos.x
 	add_wave_point.y = pos.y
 	add_wave_point.z = mouse_size
