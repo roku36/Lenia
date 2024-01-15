@@ -42,6 +42,7 @@ const float mu = 0.14;     // growth center
 const float sigma = 0.014; // growth width
 const float rho = 0.5;     // kernel center
 const float omega = 0.15;  // kernel width
+const float spawn_range = 5.0;
 
 float bell(float x, float m, float s){
 	return exp(-(x-m)*(x-m)/s/s/2.);  // bell-shaped curve
@@ -74,7 +75,6 @@ void main() {
 
 	// if uv.z == add_wave_point.z && uv.xy euclid distance from add_wave_point.xy < 30
 	// float spawn_range = 10.0;
-	float spawn_range = 10.0;
 	if (params.add_wave_point.z > 0.0 && spawn_range * spawn_range > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
 		// c = 0.5 + 10 * noise(vec2(val));
 		c = params.add_wave_point.z;

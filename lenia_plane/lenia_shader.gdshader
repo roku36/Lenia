@@ -32,7 +32,7 @@ void fragment() {
 	// use effect_texture as albedo
 	float value = texture(effect_texture, UV).r;
 	// vec3 albedo = mix(color1, color2, value);
-	vec3 albedo = texture(color_gradient,vec2(clamp(value, 0.01, 0.99), 0.1)).rgb;
+	vec3 albedo = texture(color_gradient,vec2(clamp(value, 0.01, 0.99), 0.0)).rgb;
 	// vec3 albedo = texture(color_gradient,UV).rgb;
 	// vec3 albedo = vec3(value);
 	ALBEDO = albedo;
