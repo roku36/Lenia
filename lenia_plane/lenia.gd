@@ -1,85 +1,49 @@
-extends Area3D
+extends ColorRect
 
-@export var rain_size : float = 3.0
 @export var mouse_size : float = 5.0
-@export var texture_size : Vector2i = Vector2i(512, 512)
+@export var mouse_weight: float = 5.0
 @export_range(1.0, 10.0, 0.1) var damp : float = 1.0
+
+@onready var fps_label: Label = $FpsLabel
 
 var t: float = 0.0
 var max_t: float = 0.1
 
 var texture : Texture2DRD
+var texture_size : Vector2i
 var next_texture : int = 0
 
 var add_wave_point : Vector4
-var mouse_pos : Vector2
-var mouse_pressed : bool = false
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	# In case we're running stuff on the rendering thread
 	# we need to do our initialisation on that thread.
+	texture_size = Vector2i(self.size)
 	RenderingServer.call_on_render_thread(_initialize_compute_code.bind(texture_size))
 
 	# Get our texture from our material so we set our RID.
-	var material : ShaderMaterial = $MeshInstance3D.material_override
-	if material:
-		material.set_shader_parameter("effect_texture_size", texture_size)
-
-		# Get our texture object.
-		texture = material.get_shader_parameter("effect_texture")
-
-
-func _exit_tree() -> void:
-	# Make sure we clean up!
-	if texture:
-		texture.texture_rd_rid = RID()
-
-	RenderingServer.call_on_render_thread(_free_compute_resources)
-
-
-func _unhandled_input(event: InputEvent) -> void:
-	if event is InputEventMouseMotion or event is InputEventMouseButton:
-		mouse_pos = event.global_position
-
-	if event is InputEventMouseButton and event.button_index == MouseButton.MOUSE_BUTTON_LEFT:
-		mouse_pressed = event.pressed
-
+	self.material.set_shader_parameter("effect_texture_size", texture_size)
+	# Get our texture object.
+	texture = self.material.get_shader_parameter("effect_texture")
 
 func _check_mouse_pos() -> void:
-	# This is a mouse event, do a raycast.
-	var camera: Camera3D = get_viewport().get_camera_3d()
-
-	var parameters: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.new()
-	parameters.from = camera.project_ray_origin(mouse_pos)
-	parameters.to = parameters.from + camera.project_ray_normal(mouse_pos) * 100.0
-	parameters.collision_mask = 1
-	parameters.collide_with_bodies = false
-	parameters.collide_with_areas = true
-
-	var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(parameters)
-	if result.size() > 0:
-		# Transform our intersection point.
-		var pos: Vector3 = global_transform.affine_inverse() * result.position
-		add_wave_point.x = clamp(pos.x / 5.0, -0.5, 0.5) * texture_size.x + 0.5 * texture_size.x
-		add_wave_point.y = clamp(pos.z / 5.0, -0.5, 0.5) * texture_size.y + 0.5 * texture_size.y
-		add_wave_point.w = 1.0 # We have w left over so we use it to indicate mouse is over our water plane.
-	else:
-		add_wave_point.x = 0.0
-		add_wave_point.y = 0.0
-		add_wave_point.w = 0.0
-
+	var pos := self.get_local_mouse_position()
+	add_wave_point.x = pos.x
+	add_wave_point.y = pos.y
+	add_wave_point.z = mouse_size
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
-	# If tool is enabled, ignore mouse input.
-	if Engine.is_editor_hint():
-		add_wave_point.w = 0.0
-	else:
-		# Check where our mouse intersects our area, can change if things move.
-		_check_mouse_pos()
-
-	add_wave_point.z = mouse_size if mouse_pressed else 0.0
+	fps_label.text = str(Engine.get_frames_per_second())
+	_check_mouse_pos()
+	add_wave_point.z = 0.0
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		add_wave_point.z = mouse_size
+		add_wave_point.w = mouse_weight
+	elif Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		add_wave_point.z = mouse_size
+		add_wave_point.w = -mouse_weight
 
 	# Increase our next texture index.
 	next_texture = (next_texture + 1) % 2
@@ -199,6 +163,5 @@ func _free_compute_resources() -> void:
 	for i in range(2):
 		if texture_rds[i]:
 			rd.free_rid(texture_rds[i])
-
 	if shader:
 		rd.free_rid(shader)
