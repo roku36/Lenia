@@ -16,14 +16,14 @@ shader_parameter/effect_texture_size = Vector2(2.08165e-12, 2.08165e-12)
 shader_parameter/color_gradient = SubResource("GradientTexture1D_4v0kj")
 shader_parameter/effect_texture = SubResource("Texture2DRD_6s6ui")
 
-[node name="main2d" type="Node2D"]
+[node name="Lenia" type="Node2D"]
 script = ExtResource("1_bfuni")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_b5124")
-offset_right = 512.0
-offset_bottom = 512.0
+offset_right = 600.0
+offset_bottom = 400.0
 
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(261, 250)

@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var rain_size : float = 3.0
 @export var mouse_size : float = 5.0
+@export var mouse_weight: float = 5.0
 @export_range(1.0, 10.0, 0.1) var damp : float = 1.0
 
 @onready var lenia_canvas: ColorRect = %ColorRect
@@ -40,7 +40,13 @@ func _check_mouse_pos() -> void:
 func _process(_delta: float) -> void:
 	fps_label.text = str(Engine.get_frames_per_second())
 	_check_mouse_pos()
-	add_wave_point.z = mouse_size if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT)  else 0.0
+	add_wave_point.z = 0.0
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+		add_wave_point.z = mouse_size
+		add_wave_point.w = mouse_weight
+	elif Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		add_wave_point.z = mouse_size
+		add_wave_point.w = -mouse_weight
 
 	# Increase our next texture index.
 	next_texture = (next_texture + 1) % 2

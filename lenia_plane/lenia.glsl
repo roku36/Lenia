@@ -35,14 +35,13 @@ float noise( in vec2 p )
 	return dot( n, vec3(70.0) );
 }
 
-const float R = 20.;       // space resolution = kernel radius
+const float R = 20.0;       // space resolution = kernel radius
 const float T = 10.;       // time resolution = number of divisions per unit time
 const float dt = 1./T;     // time step
 const float mu = 0.14;     // growth center
 const float sigma = 0.014; // growth width
 const float rho = 0.5;     // kernel center
 const float omega = 0.15;  // kernel width
-const float spawn_range = 5.0;
 
 float bell(float x, float m, float s){
 	return exp(-(x-m)*(x-m)/s/s/2.);  // bell-shaped curve
@@ -75,9 +74,10 @@ void main() {
 
 	// if uv.z == add_wave_point.z && uv.xy euclid distance from add_wave_point.xy < 30
 	// float spawn_range = 10.0;
-	if (params.add_wave_point.z > 0.0 && spawn_range * spawn_range > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
+	float spawn_range = params.add_wave_point.z;
+	if (spawn_range * spawn_range > (uv.x - params.add_wave_point.x) * (uv.x - params.add_wave_point.x) + (uv.y - params.add_wave_point.y) * (uv.y - params.add_wave_point.y)) {
 		// c = 0.5 + 10 * noise(vec2(val));
-		c = params.add_wave_point.z;
+		c = params.add_wave_point.w;
 	}
 
 	vec4 result_vec = vec4(c,c,c,1.);
