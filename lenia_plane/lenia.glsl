@@ -54,12 +54,13 @@ void main() {
 
 	float sum = 0.;
 	float total = 0.;
+	ivec2 offset = ivec2(0, 3);
 	for (int x=-int(R); x<=int(R); x++)
 		for (int y=-int(R); y<=int(R); y++)
 		{
 			float r = sqrt(float(x*x + y*y)) / R;
-			ivec2 wrapped_coords = ivec2(mod(uv + ivec2(x, y), size));
-			float val = imageLoad(current_image, wrapped_coords).x;
+			ivec2 wrapped_coords = ivec2(mod(uv + ivec2(x, y) + offset, size));
+			float val = imageLoad(current_image, wrapped_coords).r;
 			float weight = bell(r, rho, omega);
 			sum += val * weight;
 			total += weight;
@@ -69,6 +70,16 @@ void main() {
 	float val = imageLoad(current_image, uv).x;
 	// float growth = bell(avg, mu, sigma) * 2. - 1.;
 	float growth = bell(avg*(1.0 + (val-0.5)*0.2), mu, sigma) * 2. - 1.;
+	// vec2 center = params.add_wave_point.xy;
+	// float dist_from_center = sqrt(float((uv.x - center.x) * (uv.x - center.x) + (uv.y - center.y) * (uv.y - center.y)));
+	// float nonarea_growth = -1.0;
+	// float area_range = 10.0;
+	// float border_width = 20.0;
+	// if (dist_from_center > area_range) {
+	// 	growth = mix(growth, nonarea_growth, smoothstep(0.0, border_width, dist_from_center - area_range));
+	// 	if (dist_from_center - area_range < 10) growth += 0.7;
+	// }
+	
 	// float growth = bell(avg, mu, sigma*(1.0 + val*0.5)) * 2. - 1.;
 	float c = clamp(val + dt * growth, 0., 1.);
 

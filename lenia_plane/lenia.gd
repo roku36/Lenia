@@ -31,7 +31,6 @@ func _check_mouse_pos() -> void:
 	var pos := self.get_local_mouse_position()
 	add_wave_point.x = pos.x
 	add_wave_point.y = pos.y
-	add_wave_point.z = mouse_size
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta: float) -> void:
@@ -109,10 +108,8 @@ func _initialize_compute_code(init_with_texture_size: Vector2i) -> void:
 	for i in range(2):
 		# Create our texture.
 		texture_rds[i] = rd.texture_create(tf, RDTextureView.new(), [])
-
 		# Make sure our textures are cleared.
 		rd.texture_clear(texture_rds[i], Color(0, 0, 0, 0), 0, 1, 0, 1)
-
 		# Now create our uniform set so we can use these textures in our shader.
 		texture_sets[i] = _create_uniform_set(texture_rds[i])
 
@@ -125,7 +122,6 @@ func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vect
 	push_constant.push_back(wave_point.y)
 	push_constant.push_back(wave_point.z)
 	push_constant.push_back(wave_point.w)
-
 	push_constant.push_back(tex_size.x)
 	push_constant.push_back(tex_size.y)
 	push_constant.push_back(damp)

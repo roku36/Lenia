@@ -4,6 +4,8 @@
 [ext_resource type="Script" path="res://lenia_plane/lenia.gd" id="2_m6fgn"]
 
 [sub_resource type="Gradient" id="Gradient_8k3rw"]
+offsets = PackedFloat32Array(0, 0.143975, 0.262911, 0.43975, 0.627543, 0.85133, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.509804, 0, 0.0862745, 1, 0.737255, 0.196078, 0.737255, 1, 0, 1, 0.721569, 1, 1, 0.32549, 0, 1, 0.663301, 0.808823, 0, 1, 1, 0, 0.909804, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_4v0kj"]
 gradient = SubResource("Gradient_8k3rw")
@@ -21,8 +23,10 @@ shader_parameter/effect_texture = SubResource("Texture2DRD_6s6ui")
 [node name="ColorRect" type="ColorRect" parent="."]
 unique_name_in_owner = true
 material = SubResource("ShaderMaterial_b5124")
-offset_right = 600.0
-offset_bottom = 400.0
+offset_left = -212.0
+offset_top = 59.0
+offset_right = 728.0
+offset_bottom = 386.0
 script = ExtResource("2_m6fgn")
 
 [node name="FpsLabel" type="Label" parent="ColorRect"]
@@ -37,3 +41,6 @@ text = "aaaaaaaaaaa"
 [node name="Camera2D" type="Camera2D" parent="."]
 position = Vector2(261, 250)
 zoom = Vector2(2, 2)
+
+[node name="Node2D" type="Node2D" parent="."]
+position = Vector2(94, 169)
