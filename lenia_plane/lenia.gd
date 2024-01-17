@@ -12,6 +12,7 @@ var max_t: float = 0.1
 var texture : Texture2DRD
 var texture_size : Vector2i
 var next_texture : int = 0
+var flow_offset: float = 0.1
 
 var add_wave_point : Vector4
 
@@ -43,6 +44,10 @@ func _process(_delta: float) -> void:
 	elif Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 		add_wave_point.z = mouse_size
 		add_wave_point.w = -mouse_weight
+	if Input.is_action_pressed("ui_accept"):
+		flow_offset = 0.1
+	else:
+		flow_offset = -0.1
 
 	# Increase our next texture index.
 	next_texture = (next_texture + 1) % 2
@@ -124,8 +129,8 @@ func _render_process(with_next_texture: int, wave_point: Vector4, tex_size: Vect
 	push_constant.push_back(wave_point.w)
 	push_constant.push_back(tex_size.x)
 	push_constant.push_back(tex_size.y)
-	push_constant.push_back(damp)
 	push_constant.push_back(0.0)
+	push_constant.push_back(flow_offset)
 
 	# Calculate our dispatch group size.
 	# We do `n - 1 / 8 + 1` in case our texture size is not nicely

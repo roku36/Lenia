@@ -26,6 +26,10 @@ window/size/viewport_height=1200
 window/size/resizable=false
 window/size/borderless=true
 
+[editor]
+
+movie_writer/movie_file="/Users/roku/twitterMovie/lenia/Lenia.avi"
+
 [rendering]
 
 driver/threads/thread_model=2

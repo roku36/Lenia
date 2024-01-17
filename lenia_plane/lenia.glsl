@@ -9,8 +9,8 @@ layout(r32f, set = 1, binding = 0) uniform restrict writeonly image2D output_ima
 layout(push_constant, std430) uniform Params {
 	vec4 add_wave_point;
 	vec2 texture_size;
-	float damp;
 	float res2;
+	float flow_offset;
 } params;
 
 vec2 hash( vec2 p )
@@ -35,7 +35,7 @@ float noise( in vec2 p )
 	return dot( n, vec3(70.0) );
 }
 
-const float R = 20.0;       // space resolution = kernel radius
+const float R = 15.0;       // space resolution = kernel radius
 const float T = 10.;       // time resolution = number of divisions per unit time
 const float dt = 1./T;     // time step
 const float mu = 0.14;     // growth center
@@ -54,7 +54,9 @@ void main() {
 
 	float sum = 0.;
 	float total = 0.;
-	ivec2 offset = ivec2(0, 3);
+	// vec2 offset = (uv - params.add_wave_point.xy) * 0.07;
+	// vec2 offset = params.flow_offset * (uv - params.add_wave_point.xy);
+	vec2 offset = params.flow_offset * (uv - ivec2(params.texture_size.x/2, params.texture_size.y/2));
 	for (int x=-int(R); x<=int(R); x++)
 		for (int y=-int(R); y<=int(R); y++)
 		{
@@ -70,6 +72,8 @@ void main() {
 	float val = imageLoad(current_image, uv).x;
 	// float growth = bell(avg, mu, sigma) * 2. - 1.;
 	float growth = bell(avg*(1.0 + (val-0.5)*0.2), mu, sigma) * 2. - 1.;
+
+	// GROWTH ONLY AROUND MOUSE CURSOR
 	// vec2 center = params.add_wave_point.xy;
 	// float dist_from_center = sqrt(float((uv.x - center.x) * (uv.x - center.x) + (uv.y - center.y) * (uv.y - center.y)));
 	// float nonarea_growth = -1.0;
